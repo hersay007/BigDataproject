@@ -1,0 +1,16 @@
+# Big Data Project Gitignore
+*.pyc
+__pycache__/
+.DS_Store
+*.swp
+*.swo
+
+# Data files (keep scripts, ignore raw GB dumps)
+dataset/*.csv
+!dataset/bangalore_smart_meters_sample.csv
+
+# Output logs and temporary run files
+output/tmp/
+output/*.tmp
+.idea/
+.vscode/
