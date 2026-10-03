@@ -1,0 +1,103 @@
+version: "3.8"
+
+networks:
+  bigdata-net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+
+volumes:
+  namenode_data:
+  datanode1_data:
+  datanode2_data:
+  spark_events:
+
+services:
+  # =========================================================================
+  # MASTER NODE: NameNode, YARN ResourceManager, Spark Master, Hive Metastore
+  # =========================================================================
+  master:
+    image: bde2020/hadoop-namenode:2.0.0-hadoop3.2.1-java8
+    container_name: hadoop-master
+    hostname: master
+    networks:
+      bigdata-net:
+        ipv4_address: 172.20.0.10
+    ports:
+      - "9870:9870"   # HDFS NameNode Web UI
+      - "8088:8088"   # YARN ResourceManager Web UI
+      - "8080:8080"   # Spark Master Web UI
+      - "7077:7077"   # Spark Master Port
+      - "10000:10000" # HiveServer2 JDBC/ODBC
+      - "19888:19888" # MapReduce JobHistory UI
+      - "4040:4040"   # Spark Application UI
+    environment:
+      - CLUSTER_NAME=energy-analytics-cluster
+      - HDFS_CONF_dfs_replication=2
+      - HDFS_CONF_dfs_permissions=false
+      - HDFS_CONF_dfs_blocksize=134217728  # 128MB Block Size
+      - YARN_CONF_yarn_resourcemanager_hostname=master
+      - CORE_CONF_fs_defaultFS=hdfs://master:9000
+    volumes:
+      - namenode_data:/hadoop/dfs/name
+      - ./config:/opt/cluster-config
+      - ./dataset:/workspace/dataset
+      - ./src:/workspace/src
+      - ./scripts:/workspace/scripts
+      - ./output:/workspace/output
+    restart: always
+
+  # =========================================================================
+  # WORKER NODE 1: DataNode 1, YARN NodeManager 1, Spark Worker 1
+  # =========================================================================
+  worker1:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: hadoop-worker1
+    hostname: worker1
+    networks:
+      bigdata-net:
+        ipv4_address: 172.20.0.11
+    depends_on:
+      - master
+    ports:
+      - "9864:9864"   # DataNode 1 Web UI
+      - "8042:8042"   # NodeManager 1 Web UI
+      - "8081:8081"   # Spark Worker 1 Web UI
+    environment:
+      - SERVICE_PRECONDITION=master:9000 master:9870
+      - CORE_CONF_fs_defaultFS=hdfs://master:9000
+      - HDFS_CONF_dfs_replication=2
+      - YARN_CONF_yarn_resourcemanager_hostname=master
+    volumes:
+      - datanode1_data:/hadoop/dfs/data
+      - ./dataset:/workspace/dataset
+      - ./src:/workspace/src
+    restart: always
+
+  # =========================================================================
+  # WORKER NODE 2: DataNode 2, YARN NodeManager 2, Spark Worker 2
+  # =========================================================================
+  worker2:
+    image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
+    container_name: hadoop-worker2
+    hostname: worker2
+    networks:
+      bigdata-net:
+        ipv4_address: 172.20.0.12
+    depends_on:
+      - master
+    ports:
+      - "9865:9864"   # DataNode 2 Web UI
+      - "8043:8042"   # NodeManager 2 Web UI
+      - "8082:8081"   # Spark Worker 2 Web UI
+    environment:
+      - SERVICE_PRECONDITION=master:9000 master:9870
+      - CORE_CONF_fs_defaultFS=hdfs://master:9000
+      - HDFS_CONF_dfs_replication=2
+      - YARN_CONF_yarn_resourcemanager_hostname=master
+    volumes:
+      - datanode2_data:/hadoop/dfs/data
+      - ./dataset:/workspace/dataset
+      - ./src:/workspace/src
+    restart: always
