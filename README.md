@@ -75,3 +75,22 @@ BigDataProject/
     ├── kmeans_cluster_centers.json
     └── anomaly_detections.csv
 ```
+
+---
+
+## Live Cluster Execution & Verification Logs (Member A)
+
+### 1. HDFS Distributed Storage Report
+- **Cluster Name**: `energy-analytics-cluster`
+- **Total Ingested Telemetry Rows**: 1,800,000 intervals (198.66 MB)
+- **HDFS Path**: `/data/smart_meters/bangalore/bangalore_smart_meters_clean.csv`
+- **Replication Factor**: 2
+- **HDFS Block Allocation**:
+  - **Block 0** (`blk_1073741825_1001` - 134,217,728 bytes / 128 MB): Replicated on `worker1` (`172.20.0.11:9866`) & `worker2` (`172.20.0.12:9866`)
+  - **Block 1** (`blk_1073741826_1002` - 74,094,057 bytes / 70.7 MB): Replicated on `worker2` (`172.20.0.12:9866`) & `worker1` (`172.20.0.11:9866`)
+- **FSCK Health Status**: `HEALTHY` (0 corrupt blocks, 100% replica placement)
+
+### 2. Verified Active Endpoints
+- **HDFS NameNode UI**: `http://localhost:9870` (2 Live DataNodes)
+- **YARN ResourceManager UI**: `http://localhost:8088/cluster/nodes` (2 Running NodeManagers)
+- **Spark Master UI**: `http://localhost:8080` (Port 7077)
