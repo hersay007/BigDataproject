@@ -1,0 +1,6 @@
+OK
+Time taken: 0.04 seconds
+substation_id	consumer_type	ROUND(AVG(voltage_v), 2)	ROUND(AVG(power_factor), 3)	ROUND(SUM(active_energy_kwh), 2)
+SUB_BLR_01	Residential	242.95	0.92	120000.0
+OK
+Time taken: 0.28 seconds, Fetched: 1 row(s)
