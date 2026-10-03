@@ -2,6 +2,7 @@
 """
 Hadoop Streaming Mapper for Bangalore Smart Grid Peak Load Analytics.
 Emits (substation_id#consumer_type#hour, active_energy_kwh, current_a, voltage_v, count).
+Compatible with Python 3.5+
 """
 import sys
 
@@ -30,7 +31,7 @@ for line in sys.stdin:
             time_part = timestamp.split("T")[1]
             hour = time_part.split(":")[0]
 
-        composite_key = f"{substation_id}#{consumer_type}#{hour}"
-        print(f"{composite_key}\t{active_kwh},{current},{voltage},1")
+        composite_key = "{0}#{1}#{2}".format(substation_id, consumer_type, hour)
+        print("{0}\t{1},{2},{3},1".format(composite_key, active_kwh, current, voltage))
     except (ValueError, IndexError):
         continue

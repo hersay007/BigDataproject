@@ -2,6 +2,7 @@
 """
 Hadoop Streaming Reducer for Bangalore Smart Grid Peak Load Analytics.
 Aggregates total energy consumption, peak current, and average grid voltage.
+Compatible with Python 3.5+
 """
 import sys
 
@@ -40,7 +41,9 @@ for line in sys.stdin:
             ctype = parts[1] if len(parts) > 1 else "Unknown"
             hour = parts[2] if len(parts) > 2 else "00"
             avg_voltage = round(voltage_sum / total_readings, 2) if total_readings > 0 else 0.0
-            print(f"{sub_id}\t{ctype}\t{hour}\t{total_kwh:.2f}\t{max_current:.2f}\t{avg_voltage}\t{total_readings}")
+            print("{0}\t{1}\t{2}\t{3:.2f}\t{4:.2f}\t{5}\t{6}".format(
+                sub_id, ctype, hour, total_kwh, max_current, avg_voltage, total_readings
+            ))
 
         current_key = key
         total_kwh = kwh
@@ -54,4 +57,6 @@ if current_key and total_readings > 0:
     ctype = parts[1] if len(parts) > 1 else "Unknown"
     hour = parts[2] if len(parts) > 2 else "00"
     avg_voltage = round(voltage_sum / total_readings, 2) if total_readings > 0 else 0.0
-    print(f"{sub_id}\t{ctype}\t{hour}\t{total_kwh:.2f}\t{max_current:.2f}\t{avg_voltage}\t{total_readings}")
+    print("{0}\t{1}\t{2}\t{3:.2f}\t{4:.2f}\t{5}\t{6}".format(
+        sub_id, ctype, hour, total_kwh, max_current, avg_voltage, total_readings
+    ))
