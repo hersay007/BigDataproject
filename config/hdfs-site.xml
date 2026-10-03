@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <!-- Replication factor matches 2 worker DataNodes in cluster -->
+    <property>
+        <name>dfs.replication</name>
+        <value>2</value>
+        <description>Block replication factor across worker1 and worker2</description>
+    </property>
+
+    <!-- Default Block Size for Smart Meter CSV/Parquet files -->
+    <property>
+        <name>dfs.blocksize</name>
+        <value>134217728</value>
+        <description>128MB HDFS block size</description>
+    </property>
+
+    <!-- Disable strict permission check for university lab sandbox -->
+    <property>
+        <name>dfs.permissions.enabled</name>
+        <value>false</value>
+    </property>
+
+    <!-- NameNode storage directory -->
+    <property>
+        <name>dfs.namenode.name.dir</name>
+        <value>file:///hadoop/dfs/name</value>
+    </property>
+
+    <!-- DataNode storage directory -->
+    <property>
+        <name>dfs.datanode.data.dir</name>
+        <value>file:///hadoop/dfs/data</value>
+    </property>
+
+    <!-- WebHDFS Enabled for REST API access -->
+    <property>
+        <name>dfs.webhdfs.enabled</name>
+        <value>true</value>
+    </property>
+</configuration>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <!-- Default Distributed FileSystem URI pointing to the Master NameNode -->
+    <property>
+        <name>fs.defaultFS</name>
+        <value>hdfs://master:9000</value>
+        <description>The name of the default file system. A URI whose scheme and authority determine the FileSystem implementation.</description>
+    </property>
+
+    <!-- Buffer size for high-throughput streaming analytics -->
+    <property>
+        <name>io.file.buffer.size</name>
+        <value>131072</value>
+        <description>128KB buffer size for large smart meter batch read operations</description>
+    </property>
+
+    <!-- Hadoop temporary directory -->
+    <property>
+        <name>hadoop.tmp.dir</name>
+        <value>/tmp/hadoop-${user.name}</value>
+    </property>
+</configuration>
